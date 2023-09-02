@@ -1,8 +1,8 @@
 package me.luckdeh.tpaplugin.Commands;
 
 import me.luckdeh.tpaplugin.TpaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,32 +24,39 @@ public class TpacceptCommand implements CommandExecutor {
 
         Player receiver = (Player) sender;
 
-        if (TpaPlugin.TpaSender == null) {
+        if (TpaPlugin.TpaSender == null || TpaPlugin.TpaReceiver == null) {
             receiver.sendMessage(ChatColor.RED + "No teleport request pending.");
+            return true;
+        }
+
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime - TpaPlugin.requestTimestamp > 20 * 60 * 1000) {
+            receiver.sendMessage(ChatColor.RED + "Teleport request has expired.");
+            TpaPlugin.TpaSender.sendMessage(ChatColor.RED + "Teleport request to " + TpaPlugin.TpaReceiver.getDisplayName() + " has expired.");
+            resetRequest();
             return true;
         }
 
         Player senderPlayer = TpaPlugin.TpaSender;
 
+        if (senderPlayer.getLocation().distance(receiver.getLocation()) <= 5.0) {
+            senderPlayer.teleport(receiver.getLocation());
+            senderPlayer.sendMessage(ChatColor.YELLOW + "Accepted teleport request from " + receiver.getDisplayName());
+            receiver.sendMessage(ChatColor.YELLOW + "Teleport request accepted by " + senderPlayer.getDisplayName());
+        } else {
+            senderPlayer.teleport(receiver.getLocation());
+            senderPlayer.sendMessage(ChatColor.YELLOW + "Accepted teleport request from " + receiver.getDisplayName());
+            receiver.sendMessage(ChatColor.YELLOW + "Teleport request accepted by " + senderPlayer.getDisplayName());
+        }
 
-        senderPlayer.teleport(receiver.getLocation());
-
-        senderPlayer.sendMessage(ChatColor.YELLOW + "Accepted teleport request from " + receiver.getDisplayName());
-        receiver.sendMessage(ChatColor.YELLOW + "Teleport request accepted by " + senderPlayer.getDisplayName());
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(-0.5, 1, -0.5), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(-0.4, 1, -0.4), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(-0.3, 1, -0.3), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(-0.2, 1, -0.2), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(-0.1, 1, -0.1), 100);
-
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(0.5, 1, 0.5), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(0.4, 1, 0.4), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(0.3, 1, 0.3), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(0.2, 1, 0.2), 100);
-        receiver.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, receiver.getLocation().add(0.1, 1, 0.1), 100);
-
-        TpaPlugin.TpaSender = null;
-
+        resetRequest();
         return true;
+    }
+
+    private void resetRequest() {
+        TpaPlugin.TpaSender = null;
+        TpaPlugin.TpaReceiver = null;
+        TpaPlugin.requestTimestamp = 0;
     }
 }
