@@ -4,6 +4,7 @@ import me.luckdeh.tpaplugin.Commands.TpDenyCommand;
 import me.luckdeh.tpaplugin.Commands.TpaCommand;
 import me.luckdeh.tpaplugin.Commands.TpaHereCommand;
 import me.luckdeh.tpaplugin.Commands.TpacceptCommand;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,12 +20,11 @@ public final class TpaPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         TpaPlugin.instance = this;
+
         getCommand("tpa").setExecutor(new TpaCommand(this));
         getCommand("tpaccept").setExecutor(new TpacceptCommand(this));
         getCommand("tpdeny").setExecutor(new TpDenyCommand());
         getCommand("tpahere").setExecutor(new TpaHereCommand(this));
-
-
     }
 
     @Override
@@ -32,6 +32,9 @@ public final class TpaPlugin extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public void onCommand(CommandSender tpaccepter, String tpaccept) {
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        return true;
     }
 }

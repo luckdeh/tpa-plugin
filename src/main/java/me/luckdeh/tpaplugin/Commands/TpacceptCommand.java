@@ -3,6 +3,8 @@ package me.luckdeh.tpaplugin.Commands;
 import me.luckdeh.tpaplugin.TpaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,6 +46,7 @@ public class TpacceptCommand implements CommandExecutor {
             senderPlayer.teleport(receiver.getLocation());
             senderPlayer.sendMessage(ChatColor.YELLOW + "Accepted teleport request from " + receiver.getDisplayName());
             receiver.sendMessage(ChatColor.YELLOW + "Teleport request accepted by " + senderPlayer.getDisplayName());
+
         } else {
             senderPlayer.teleport(receiver.getLocation());
             senderPlayer.sendMessage(ChatColor.YELLOW + "Accepted teleport request from " + receiver.getDisplayName());

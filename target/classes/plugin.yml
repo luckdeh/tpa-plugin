@@ -3,12 +3,15 @@ version: '1.0-SNAPSHOT'
 main: me.luckdeh.tpaplugin.TpaPlugin
 api-version: '1.20'
 commands:
+  tpahere:
+    description: tpahere
+    permission: tpa.here
   tpdeny:
-    description: Tpdeny
+    description: tpdeny
     permission: tpa.deny
   tpa:
-    description: Tpa
+    description: tpa
     permission: tpa.tpa
   tpaccept:
-    description: Tpaccept
+    description: tpaccept
     permission: tpa.accept
