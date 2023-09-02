@@ -1,4 +1,5 @@
 me\luckdeh\tpaplugin\Commands\TpaCommand.class
+me\luckdeh\tpaplugin\Commands\TpaHereCommand.class
 me\luckdeh\tpaplugin\Commands\TpDenyCommand.class
 me\luckdeh\tpaplugin\Commands\TpacceptCommand.class
 me\luckdeh\tpaplugin\TpaPlugin.class
